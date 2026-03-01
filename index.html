@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koojoo Enterprise | Premium Printing Services</title>
+    <meta name="description" content="Professional printing press in Asante Akyem North. 400+ products including banners, business cards, wedding stationery, flyers, church materials, event designs, and custom gifts.">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="favicon_io/site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://via.placeholder.com https://maps.gstatic.com https://maps.googleapis.com; frame-src https://www.google.com;">
+    <style>
+        /* Custom tweaks for landing page */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .hero { padding-top: 140px; } /* Push down for fixed nav */
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo">
+            <img src="logo/logo.png" alt="Koojoo Enterprise Logo">
+            <span>KOOJOO <span>ENTERPRISE</span></span>
+        </a>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index.html" class="active">Home</a>
+            <a href="products.html">Products</a>
+            <a href="about.html">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="cart-btn-nav" onclick="toggleCart()">
+                🛒 <span class="cart-count">0</span>
+            </div>
+            <a href="https://wa.me/233554411907" class="cta-btn" target="_blank">WhatsApp</a>
+            <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>WE PRINT <br><span class="highlight">YOUR VISION.</span></h1>
+            <p>Agogo's premier destination for high-quality printing. Over 500 products including banners, business cards, wedding stationery, corporate branding, and custom gifts.</p>
+            <div style="display: flex; gap: 15px;">
+                <a href="products.html" class="btn-primary">🔍 Explore Products</a>
+                <a href="#contact" class="btn-secondary" style="border: 1px solid var(--white); padding: 1rem 2rem; border-radius: 50px; font-weight: 700; color:white;">📞 Get a Quote</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="images/hero/welcome image.png" alt="Welcome to Koojoo Enterprise" onerror="this.style.display='none'">
+        </div>
+    </header>
+
+    <!-- SEARCH SECTION -->
+    <section class="container" style="background: rgba(0,229,255,0.02); text-align: center;">
+        <h2 style="margin-bottom: 30px;">Find What You Need</h2>
+        <div class="search-box" style="position: relative; max-width: 600px; margin: 0 auto;">
+            <input type="text" id="masterSearch" placeholder="Search for products (e.g., 'Business Cards', 'Banners')" 
+                   style="width: 100%; padding: 15px 25px; border-radius: 50px; border: 1px solid var(--border); background: rgba(0,0,0,0.5); color: white; outline: none;">
+            <div id="searchResults" class="search-results">
+                <!-- Results injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED CATEGORIES -->
+    <section class="container" id="categories">
+        <div class="section-header">
+            <h2>Popular <span class="highlight">Categories</span></h2>
+            <p>Explore our most requested printing services.</p>
+        </div>
+        
+        <div class="featured-grid" id="home-categories">
+            <!-- Categories injected by JS -->
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="products.html" class="btn-primary">View All Categories</a>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="container" id="services" style="background: linear-gradient(to bottom, transparent, rgba(255,0,122,0.05));">
+        <div class="section-header">
+            <h2>Our <span class="highlight">Services</span></h2>
+            <p>Professional printing solutions tailored to your needs</p>
+        </div>
+
+        <div class="grid-auto">
+            <div class="card" style="padding: 30px; text-align: center;">
+                <h3 style="color: var(--secondary); margin-bottom: 15px;">⚡ Express Printing</h3>
+                <p style="color: #aaa;">24-hour turnaround for urgent projects. Same-day service available for select products.</p>
+            </div>
+            <div class="card" style="padding: 30px; text-align: center;">
+                <h3 style="color: var(--secondary); margin-bottom: 15px;">🎨 Custom Design</h3>
+                <p style="color: #aaa;">Professional designers to bring your vision to life. Free design consultation included.</p>
+            </div>
+            <div class="card" style="padding: 30px; text-align: center;">
+                <h3 style="color: var(--secondary); margin-bottom: 15px;">🚚 Delivery</h3>
+                <p style="color: #aaa;">Fast delivery across Agogo and surrounding areas in Asante Akyem North.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="container" id="contact">
+        <div class="section-header">
+            <h2>Get In <span class="highlight">Touch</span></h2>
+            <p>Ready to start your project? Contact us today.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+            <div style="background: var(--glass); padding: 40px; border-radius: 20px; border: 1px solid var(--border);">
+                <h3 style="margin-bottom: 20px;">Contact Info</h3>
+                <p style="margin-bottom: 15px;"><strong>📍 Address:</strong><br>Agogo, Asante Akyem North, Ghana</p>
+                <p style="margin-bottom: 15px;"><strong>📞 Phone:</strong><br>
+                    <a href="tel:+233554411907" style="color: var(--primary); text-decoration: underline;">+233554411907</a><br>
+                    <a href="tel:+233203486016" style="color: var(--primary); text-decoration: underline;">+233203486016</a>
+                </p>
+                <p style="margin-bottom: 15px;"><strong>📧 Email:</strong><br>
+                    <a href="mailto:nyarkojosephnsonamoah018@gmail.com" style="color: var(--primary); text-decoration: underline;">nyarkojosephnsonamoah018@gmail.com</a>
+                </p>
+                <a href="https://wa.me/233554411907" class="btn-primary" target="_blank" style="margin-top: 20px; width: 100%; justify-content: center;">💬 Chat on WhatsApp</a>
+            </div>
+
+            <div style="background: var(--glass); padding: 40px; border-radius: 20px; border: 1px solid var(--border);">
+                <form id="contactForm">
+                    <input type="text" id="contactName" placeholder="Your Name" required style="width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: white;">
+                    <input type="email" id="contactEmail" placeholder="Your Email (Optional)" style="width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: white;">
+                    <textarea id="contactMessage" placeholder="How can we help you?" required rows="4" style="width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: white;"></textarea>
+                    <button type="submit" class="btn-primary" style="width: 100%;">🚀 Send Message</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="map-container" style="margin-top: 50px;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15000!2d-1.0838317!3d6.7977585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfd94186411d3101%3A0x6b16027429683952!2sAgogo!5e0!3m2!1sen!2sgh!4v1709156000000!5m2!1sen!2sgh"
+                    width="100%" height="450" style="border:0; border-radius: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+
+    <!-- PRODUCT VIDEO PREVIEW (FLOAT REEL) -->
+    <div class="product-reel-pip" id="productReel" onclick="goToReelProduct()" style="cursor: pointer;">
+        <div class="pip-header">
+            <div class="pip-status-dot"></div>
+            <button onclick="closeReel(event)">&times;</button>
+        </div>
+        <div class="pip-content" id="pipContent">
+            <!-- Product images cycle here -->
+             <div class="pip-loading">Initializing Reel...</div>
+        </div>
+        <div class="pip-info">
+            <div id="pipName">Loading...</div>
+            <div id="pipPrice">GH₵ 0.00</div>
+        </div>
+        <div class="pip-overlay"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer style="background: #050505; border-top: 1px solid var(--border); padding: 40px 5%; text-align: center;">
+        <p>© 2026 Koojoo Enterprise. All rights reserved. | Agogo, Asante Akyem North, Ghana</p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <style>
+        /* --- FLOATING PRODUCT REEL (PIP) --- */
+        .product-reel-pip {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 180px;
+            height: 240px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            z-index: 5000;
+            border: 2px solid var(--primary);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0,229,255,0.2);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInPip 1s ease-out forwards;
+        }
+
+        @keyframes slideInPip {
+            from { transform: translateX(120%) scale(0.8); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        .pip-header {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+
+        .pip-status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--secondary);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--secondary);
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .pip-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .pip-content {
+            flex: 1;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 1s ease-in-out, filter 1s ease-in-out;
+        }
+
+        /* Class applied during the "blend" transition */
+        .pip-content.blending {
+            opacity: 0;
+            filter: blur(10px) brightness(1.5);
+        }
+
+        .pip-content img {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+            transition: transform 6s ease-in-out;
+            filter: brightness(1.05) contrast(1.05);
+            transform: scale(0.95);
+        }
+
+        .pip-content .zoom-effect {
+            transform: scale(1.1);
+        }
+
+        .pip-info {
+            background: #0a0a0b;
+            padding: 10px 12px;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 5;
+        }
+
+        #pipName {
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--white);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #pipPrice {
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .pip-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            z-index: 4;
+        }
+
+        .pip-loading {
+            font-size: 0.6rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .product-reel-pip {
+                width: 140px;
+                height: 180px;
+                bottom: 20px;
+                right: 20px;
+                border-radius: 12px;
+            }
+            #pipName { font-size: 0.65rem; }
+            #pipPrice { font-size: 0.7rem; }
+        }
+    </style>
+    <script>
+        // Manually trigger render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHomeCategories();
+        });
+    </script>
+</body>
+</html>
