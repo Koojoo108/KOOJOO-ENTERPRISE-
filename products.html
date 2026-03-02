@@ -34,7 +34,6 @@
             <div class="cart-btn-nav" onclick="toggleCart()">
                 🛒 <span class="cart-count">0</span>
             </div>
-            <a href="https://wa.me/233554411907" class="cta-btn" target="_blank">WhatsApp</a>
             <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle Menu">
                 <span></span>
                 <span></span>
@@ -71,8 +70,20 @@
             <div class="grid-auto" id="products-grid">
                 <!-- Products injected by JS -->
             </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <button id="load-more-btn" class="btn-primary" onclick="loadMoreProducts()" style="display: none; margin: 0 auto;">📂 Load More Products</button>
+            </div>
         </main>
     </div>
+
+    <!-- FOOTER -->
+    <footer style="background: #050505; border-top: 1px solid var(--border); padding: 40px 5%; text-align: center;">
+        <div style="margin-bottom: 25px;">
+            <a href="https://wa.me/233554411907" class="cta-btn" target="_blank" style="display: inline-flex; margin: 0 auto; padding: 12px 30px; font-size: 1rem;">💬 Chat on WhatsApp</a>
+        </div>
+        <p>© 2026 Koojoo Enterprise. All rights reserved. | Agogo, Asante Akyem North, Ghana</p>
+    </footer>
 
     <!-- SCRIPTS -->
     <script src="js/data.js"></script>

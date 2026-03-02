@@ -21,7 +21,7 @@
         .about-hero h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; letter-spacing: 0.08em; }
         .about-hero p { color: var(--text-muted); max-width: 700px; margin: 0 auto 2rem; font-size: 1.1rem; line-height: 1.9; }
         .about-hero .tagline { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.2em; color: var(--primary); }
-        .about-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary)); margin: 30px auto; }
+        .about-divider { width: 60px; height: 2px; background: var(--primary); margin: 30px auto; box-shadow: 0 0 10px var(--primary-glow); }
         .about-section { padding: 50px 5%; max-width: 860px; margin: 0 auto; }
         .about-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--white); letter-spacing: 0.05em; text-transform: none; }
         .about-section p { color: rgba(255,255,255,0.8); line-height: 1.9; margin-bottom: 1.25rem; font-size: 1rem; }
@@ -103,7 +103,6 @@
             <div class="cart-btn-nav" onclick="toggleCart()">
                 🛒 <span class="cart-count">0</span>
             </div>
-            <a href="https://wa.me/233554411907" class="cta-btn" target="_blank">WhatsApp</a>
             <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle Menu">
                 <span></span>
                 <span></span>
@@ -171,6 +170,9 @@
 
     <!-- FOOTER -->
     <footer style="background: #050505; border-top: 1px solid var(--border); padding: 40px 5%; text-align: center;">
+        <div style="margin-bottom: 25px;">
+            <a href="https://wa.me/233554411907" class="cta-btn" target="_blank" style="display: inline-flex; margin: 0 auto; padding: 12px 30px; font-size: 1rem;">💬 Chat on WhatsApp</a>
+        </div>
         <p>© 2026 Koojoo Enterprise. All rights reserved. | Agogo, Asante Akyem North, Ghana</p>
     </footer>
 
