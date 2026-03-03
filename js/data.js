@@ -19,7 +19,12 @@ const categoryIcons = {
 };
 
 const colorPalette = {
-    // All categories now use the primary brand color for a professional, unified look
+    'Agriculture': '#3AB795', 'Art Prints': '#F4A261', 'Automotive': '#2A9D8F', 'Business Cards': '#FFD166',
+    'Flyers & Brochures': '#06D6A0', 'Banners & Posters': '#118AB2', 'Campaign': '#FF6B6B', 'Catering': '#FF9500',
+    'Certificates & Awards': '#4D96FF', 'Church Materials': '#9B59B6', 'Cleaning': '#3498DB', 'Construction': '#E67E22',
+    'Corporate Branding': '#1ABC9C', 'Custom Gifts': '#E91E63', 'Eco Friendly': '#27AE60', 'Ecommerce': '#8E44AD',
+    'Education': '#2980B9', 'Event Materials': '#E74C3C', 'Financial': '#2ECC71', 'Hotel': '#F39C12',
+    'Industrial': '#7F8C8D', 'Large Format': '#16A085', 'Photography': '#9B59B6', 'Wedding Stationery': '#FFB4A2'
 };
 
 const categoryData = {};
@@ -70,4 +75,4 @@ try {
     console.error("Error mapping categories:", e);
 }
 
-function getCategoryColor(cat) { return '#00E5FF'; }
+function getCategoryColor(cat) { return colorPalette[cat] || '#00E5FF'; }
