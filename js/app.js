@@ -5,6 +5,9 @@
 // State
 let cart = JSON.parse(localStorage.getItem('koojoo_cart')) || [];
 let currentReelProduct = null;
+let productsLimit = 20;
+let productsOffset = 0;
+let filteredProducts = [];
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,10 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (document.getElementById('products-grid')) {
         renderSidebarCategories();
-        renderProductsPage();
+        productsOffset = 0; // Reset on load
+        renderProductsPage(true);
         window.addEventListener('popstate', () => {
             renderSidebarCategories();
-            renderProductsPage();
+            productsOffset = 0;
+            renderProductsPage(true);
         });
     }
 
@@ -71,8 +76,10 @@ function setupIntersectionObserver() {
         });
     });
 
-    const grid = document.getElementById('products-grid');
-    if (grid) mutationObserver.observe(grid, { childList: true });
+    ['products-grid', 'home-categories'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) mutationObserver.observe(el, { childList: true });
+    });
 }
 
 // Mobile Nav Toggle
@@ -190,7 +197,8 @@ function filterByCategory(categoryName) {
     const url = categoryName === 'All' ? 'products.html' : `products.html?category=${encodeURIComponent(categoryName)}`;
     window.history.pushState({ category: categoryName }, '', url);
     renderSidebarCategories();
-    renderProductsPage();
+    productsOffset = 0;
+    renderProductsPage(true);
 }
 
 function renderSidebarCategories() {
@@ -215,54 +223,64 @@ function escapeHTML(str) {
     return div.innerHTML;
 }
 
-function renderProductsPage() {
+function renderProductsPage(reset = false) {
     const container = document.getElementById('products-grid');
     const titleEl = document.getElementById('page-title');
+    const loadMoreBtn = document.getElementById('load-more-btn');
     if (!container || !titleEl) return;
 
-    const params = new URLSearchParams(window.location.search);
-    const categoryFilter = params.get('category');
-    const rawSearchQ = params.get('q');
-    const searchQ = rawSearchQ ? rawSearchQ.toLowerCase().trim() : null;
-    
-    let products = [];
-    if (categoryFilter && categoryData[categoryFilter]) {
-        titleEl.innerHTML = `${categoryData[categoryFilter].icon} <span class="highlight">${escapeHTML(categoryFilter)}</span>`;
-        categoryData[categoryFilter].items.forEach(item => {
-            products.push({ ...item, category: categoryFilter });
-        });
-    } else {
-        titleEl.innerHTML = `All <span class="highlight">Products</span>`;
-        for (const [cat, data] of Object.entries(categoryData)) {
-            data.items.forEach(item => {
-                products.push({ ...item, category: cat });
+    if (reset) {
+        productsOffset = 0;
+        container.innerHTML = '';
+        const params = new URLSearchParams(window.location.search);
+        const categoryFilter = params.get('category');
+        const rawSearchQ = params.get('q');
+        const searchQ = rawSearchQ ? rawSearchQ.toLowerCase().trim() : null;
+        
+        filteredProducts = [];
+        if (categoryFilter && categoryData[categoryFilter]) {
+            titleEl.innerHTML = `${categoryData[categoryFilter].icon} <span class="highlight">${escapeHTML(categoryFilter)}</span>`;
+            categoryData[categoryFilter].items.forEach(item => {
+                filteredProducts.push({ ...item, category: categoryFilter });
             });
+        } else {
+            titleEl.innerHTML = `All <span class="highlight">Products</span>`;
+            for (const [cat, data] of Object.entries(categoryData)) {
+                data.items.forEach(item => {
+                    filteredProducts.push({ ...item, category: cat });
+                });
+            }
+        }
+
+        if (searchQ) {
+            filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchQ));
+            titleEl.innerHTML = `Search results for "<span class="highlight">${escapeHTML(rawSearchQ)}</span>"`;
         }
     }
 
-    // If a search query is present, filter products safely
-    if (searchQ) {
-        products = products.filter(p => p.name.toLowerCase().includes(searchQ));
-        // FIX: Use escapeHTML to prevent XSS from URL parameters
-        titleEl.innerHTML = `Search results for "<span class="highlight">${escapeHTML(rawSearchQ)}</span>"`;
-    }
+    const nextBatch = filteredProducts.slice(productsOffset, productsOffset + productsLimit);
+    
+    // Helper to safely escape strings for inline HTML attributes and JS function calls
+    const safeStr = (str) => {
+        if (!str) return '';
+        return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    };
 
-    container.innerHTML = products.map((product, index) => {
+    const newHtml = nextBatch.map((product, index) => {
         const color = getCategoryColor(product.category);
-        // Use the localImagePath if defined in data.js, otherwise fallback to generic placeholder.
-        // For Agriculture, it's 'images/products/Agriculture/agricX.jpg'.
-        // For other categories, it's undefined, so the fallback will be used.
-        // show placeholder at 400x400, but open a larger version if no real image exists
         const imageSrc = product.localImagePath || `https://via.placeholder.com/400x400.png?text=${encodeURIComponent(product.name)}`;
         const fullImageSrc = product.localImagePath
             ? imageSrc
             : `https://via.placeholder.com/1200x1200.png?text=${encodeURIComponent(product.name)}`;
         
+        // Priority for the first 4 items in the very first load
+        const priorityAttr = (productsOffset === productsLimit && index < 4) ? 'fetchpriority="high"' : '';
+
         return `
-            <div class="card reveal" style="animation-delay: ${index * 0.05}s;">
+            <div class="card reveal" style="animation-delay: ${(index % productsLimit) * 0.05}s;">
                 <div class="card-image">
-                    <a href="${fullImageSrc}" onclick="openLightbox(event, '${fullImageSrc}')">
-                        <img src="${imageSrc}" alt="${product.name}" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400.png?text=Image+Not+Found'">
+                    <a href="javascript:void(0)" onclick="openLightbox(event, '${safeStr(fullImageSrc)}')">
+                        <img src="${imageSrc}" alt="${safeStr(product.name)}" width="400" height="400" loading="lazy" ${priorityAttr} onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400.png?text=Image+Not+Found'">
                     </a>
                 </div>
                 <div class="card-content">
@@ -270,42 +288,53 @@ function renderProductsPage() {
                     <h3 class="card-title">${product.name}</h3>
                     <div class="card-price">GH₵ ${typeof product.price === 'number' && !isNaN(product.price) ? product.price.toFixed(2) : '0.00'}</div>
                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <button class="btn-sm btn-add" onclick="addToCart('${product.id || ''}', '${product.name}', ${product.price}, '${product.category}', '${fullImageSrc}')">
+                        <button class="btn-sm btn-add" onclick="addToCart('${safeStr(product.id || '')}', '${safeStr(product.name)}', ${product.price}, '${safeStr(product.category)}', '${safeStr(fullImageSrc)}')">
                             🛒 Add to Cart
                         </button>
-                        <button class="btn-sm" onclick="quickOrderWhatsApp('${product.id || ''}', '${product.name}', ${product.price}, '${product.category}', '${fullImageSrc}')" style="background: var(--success); color: white; border: none;">
+                        <button class="btn-sm" onclick="quickOrderWhatsApp('${safeStr(product.id || '')}', '${safeStr(product.name)}', ${product.price}, '${safeStr(product.category)}', '${safeStr(fullImageSrc)}')" style="background: var(--success); color: white; border: none;">
                             💬 Order Now
                         </button>
-                        <button class="btn-sm" data-image="${imageSrc}" onclick="window.open(this.dataset.image,'_blank')" style="border:1px solid var(--border);">🔍 View</button>
+                        <button class="btn-sm" onclick="window.open('${safeStr(imageSrc)}','_blank')" style="border:1px solid var(--border);">🔍 View</button>
                     </div>
                 </div>
             </div>
         `;
     }).join('');
+
+    container.insertAdjacentHTML('beforeend', newHtml);
+    productsOffset += productsLimit;
+
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = productsOffset < filteredProducts.length ? 'block' : 'none';
+    }
+}
+
+function loadMoreProducts() {
+    renderProductsPage(false);
 }
 
 function quickOrderWhatsApp(id, name, price, category, imageUrl) {
     const activeNumber = "233554411907";
-    // Ensure we send an absolute URL for the image so WhatsApp can generate a preview when possible
-    let img = imageUrl || '';
-    try {
-        if (!/^https?:\/\//i.test(img)) {
-            const origin = window.location.origin;
-            img = origin + '/' + img.replace(/^\/+/, '');
-        }
-    } catch (e) {
-        img = imageUrl;
-    }
+    
+    // Construct absolute URLs robustly
+    const getAbsoluteUrl = (relPath) => {
+        if (!relPath) return '';
+        if (/^https?:\/\//i.test(relPath)) return relPath;
+        return new URL(relPath, window.location.href).href;
+    };
 
-    let msg = `${img}\n\n`;
-    msg += `*NEW ORDER: ${name}*\n`;
+    const imgLink = getAbsoluteUrl(imageUrl);
+    const viewLink = getAbsoluteUrl(`products.html?category=${encodeURIComponent(category)}&q=${encodeURIComponent(name)}`);
+
+    let msg = `*NEW ORDER: ${name}*\n`;
     msg += `--------------------------------\n`;
     msg += `📁 *Category:* ${category}\n`;
     if (id) msg += `🔖 *ID:* ${id}\n`;
     msg += `💰 *PRICE:* GH₵ ${typeof price === 'number' && !isNaN(price) ? price.toFixed(2) : '0.00'}\n`;
     msg += `--------------------------------\n`;
     msg += `🔢 *QUANTITY:* 1\n`;
-    msg += `📝 *NOTES:* (please add any specifications)\n\n`;
+    msg += `🔗 *View Product:* ${viewLink}\n`;
+    if (imgLink) msg += `🖼️ *Image:* ${imgLink}\n\n`;
     msg += `Please confirm availability and delivery options.`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${activeNumber}&text=${encodeURIComponent(msg)}`;
@@ -448,13 +477,16 @@ function setupSearch() {
 
 function renderHomeCategories() {
     const container = document.getElementById('home-categories');
-    const cats = Object.keys(categoryData).slice(0, 12);
+    if (!container) return;
+    const cats = Object.keys(categoryData); // Show ALL categories, not just 12
     container.innerHTML = cats.map(cat => {
         const items = categoryData[cat].items;
         const img = items[0]?.localImagePath || `https://via.placeholder.com/400/400?text=${encodeURIComponent(cat)}`;
         return `
-        <div class="card" onclick="window.location.href='products.html?category=${encodeURIComponent(cat)}'" style="cursor:pointer;">
-            <div class="card-image"><img src="${img}" alt="${cat}" loading="lazy" onerror="this.src='https://via.placeholder.com/400/400?text=${encodeURIComponent(cat)}'"></div>
+        <div class="card reveal" onclick="window.location.href='products.html?category=${encodeURIComponent(cat)}'" style="cursor:pointer;">
+            <div class="card-image">
+                <img src="${img}" alt="${cat}" width="400" height="400" loading="lazy" onerror="this.src='https://via.placeholder.com/400/400?text=${encodeURIComponent(cat)}'">
+            </div>
             <div class="card-content" style="text-align:center;">
                 <h3 style="color:var(--primary);">${cat}</h3>
                 <p style="color:#888;">${items.length} Products</p>
