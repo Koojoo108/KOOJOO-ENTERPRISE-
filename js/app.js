@@ -136,7 +136,6 @@ function startProductReel() {
     const nameEl = document.getElementById('pipName');
     const priceEl = document.getElementById('pipPrice');
 
-    // Flatten all products into one array
     let allProducts = [];
     for (const cat in categoryData) {
         categoryData[cat].items.forEach(item => {
@@ -151,26 +150,27 @@ function startProductReel() {
         currentReelProduct = product;
         const imgUrl = product.localImagePath || `https://via.placeholder.com/400x400.png?text=${encodeURIComponent(product.name)}`;
         
-        // Apply blend effect
         content.classList.add('blending');
         
         setTimeout(() => {
-            content.innerHTML = `<img src="${imgUrl}" alt="${product.name}" id="pipImg">`;
+            // Create dual layers for ghosting effect
+            content.innerHTML = `
+                <img src="${imgUrl}" alt="${product.name}" class="pip-img-active" id="pipImg">
+                <img src="${imgUrl}" alt="${product.name}" class="pip-img-ghost">
+                <div class="pip-overlay"></div>
+            `;
+            
             nameEl.innerText = product.name;
             priceEl.innerText = `GH₵ ${typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}`;
             
-            // Remove blend effect to fade in
             content.classList.remove('blending');
             
-            // Trigger slow zoom effect
             const img = document.getElementById('pipImg');
             setTimeout(() => img.classList.add('zoom-effect'), 50);
-        }, 1000); // Wait for the fade-out/blur to complete
+        }, 1000);
     }
 
-    // Initial show
     showRandomProduct();
-    // Cycle every 5 seconds
     setInterval(showRandomProduct, 5000);
 }
 

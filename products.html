@@ -77,6 +77,22 @@
         </main>
     </div>
 
+    <!-- PRODUCT VIDEO PREVIEW (FLOAT REEL) -->
+    <div class="product-reel-pip" id="productReel" onclick="goToReelProduct()" style="cursor: pointer;">
+        <div class="pip-header">
+            <div class="pip-status-dot"></div>
+            <button onclick="closeReel(event)">&times;</button>
+        </div>
+        <div class="pip-content" id="pipContent">
+             <div class="pip-loading">Initializing Reel...</div>
+        </div>
+        <div class="pip-info">
+            <div id="pipName">Loading...</div>
+            <div id="pipPrice">GH₵ 0.00</div>
+        </div>
+        <div class="pip-overlay"></div>
+    </div>
+
     <!-- FOOTER -->
     <footer style="background: #050505; border-top: 1px solid var(--border); padding: 40px 5%; text-align: center;">
         <div style="margin-bottom: 25px;">
